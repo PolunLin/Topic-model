@@ -24,7 +24,7 @@ def create_path(top_num,doc):
 
     today = datetime.now()
     h = str(today.hour)
-    path = "../data/LDA_data/" + today.strftime('%Y%m%d')+ h + "_"+ str(doc)[:-4] +"_" +str(top_num)
+    path = "../data/LDA_data/" + today.strftime('%Y%m%d')+ h + "_"+ str(doc)[:-4] +"_" +str(top_num) ## 2021032313_file_topum remove .pkl  
     os.mkdir(path)
     return path
 
@@ -56,7 +56,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(
       description =__doc__,
       formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument('--doc', help="tokenized document list data type pickle (folder:data/YOUR_DOC_NAME)", type=str, default = 'Step2_clean_data.pkl')
+    parser.add_argument('--doc', help="tokenized document list data type pickle (folder:YOUR_DOC_NAME)", type=str, default = 'Step2_clean_data.pkl')
     # parser.add_argument('--LDA_data_path', help="Save LDA data (1, dictionary,2, corpus,3, ldamodel) path LDA_PATH/your_LDA_data", type=str, default = 'LDA_data')
     parser.add_argument('--top_num', help="Define your number of topic model", type=int, default = 5)
     parser.add_argument('--seed', help="Define your random state ",type=int, default = 12345)
