@@ -13,9 +13,10 @@ import pyLDAvis.gensim # LDAvis
 from datetime import datetime
 import os
 
+import logging
 
 def Load_data(doc):
-    with open(f'../data/LDA_data/{doc}', 'rb') as f:
+    with open(f'../../data/LDA_data/{doc}', 'rb') as f:
          doc = pickle.load(f)
     return doc
 
@@ -24,7 +25,7 @@ def create_path(top_num,doc):
 
     today = datetime.now()
     h = str(today.hour)
-    path = "../data/LDA_data/" + today.strftime('%Y%m%d')+ h + "_"+ str(doc)[:-4] +"_" +str(top_num) ## 2021032313_file_topum remove .pkl  
+    path = "../../data/LDA_data/" + today.strftime('%Y%m%d')+ h + "_"+ str(doc)[:-4] +"_" +str(top_num) ## [2021032313]_[filename]_[topnum] remove .pkl  
     os.mkdir(path)
     return path
 
@@ -60,11 +61,20 @@ if __name__ == "__main__":
     # parser.add_argument('--LDA_data_path', help="Save LDA data (1, dictionary,2, corpus,3, ldamodel) path LDA_PATH/your_LDA_data", type=str, default = 'LDA_data')
     parser.add_argument('--top_num', help="Define your number of topic model", type=int, default = 5)
     parser.add_argument('--seed', help="Define your random state ",type=int, default = 12345)
+    parser.add_argument('--vis', help="LDAvis or not",type=int, default = True)
+    logging.basicConfig(filename = 'log/lda.log',format='%(asctime)s : %(levelname)s : %(message)s',datefmt = '%Y-%m-%d %H:%M:%S', level=logging.INFO)
     args = parser.parse_args()
+    logging.info(f"parameters :{args}")
 
-
-    print(f"run LDA topic(num:{args.top_num}) model")
+    logging.info(f"run LDA topic(num:{args.top_num}) model")
     doc = Load_data(args.doc)
     path = create_path(args.top_num,args.doc)
+    logging.info(f"run training LDA topic(num:{args.top_num}) model")
     dictionary,corpus,ldamodel = Train_LDA(path,doc,args.top_num,args.seed)
-    LDAvis(ldamodel,corpus,dictionary,path)
+    logging.info(f"finish training LDA topic(num:{args.top_num}) model")
+
+    if args.vis ==True:
+        logging.info(f"run LDAvis training LDA topic(num:{args.top_num}) model")
+        
+        LDAvis(ldamodel,corpus,dictionary,path)
+
